@@ -57,8 +57,8 @@ public class Server {
 		
 		if (fileNames.length() < 1)
 			return "No files in directory";
-			
-		fileNames.setLength(fileNames.length() - 1); // Delete unnecessary last "|"
+		else
+			fileNames.setLength(fileNames.length() - 1); // Delete unnecessary last "|"
 		
 		return fileNames.toString();
 	}
