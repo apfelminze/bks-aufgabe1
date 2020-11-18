@@ -3,7 +3,7 @@ package bks_package;
 public class Main {
 	public static void main(String[] args) {
 		Main main = new Main();
-		String data = main.readClientRequest("GET example1.txt"); // to be replaced with real client request
+		String data = main.readClientRequest("LIST"); // to be replaced with real client request
 		System.out.println(data);
 	}
 	
@@ -12,7 +12,7 @@ public class Main {
 		String firstPart = requestArray[0];
 		System.out.println(firstPart); // only for testing
 		String filename = "";
-		if(requestArray[1] != null) {
+		if(requestArray.length > 1) {
 			filename = requestArray[1];
 			System.out.println(filename); // only for testing
 		}
@@ -24,7 +24,9 @@ public class Main {
 		}
 		// Client says LIST
 		if(firstPart.equals("LIST")) {
-			return ""; // to be filled with reference to Server function
+			Server server = new Server();
+			String data = "Files in directory: \n" + server.listFiles();
+			return data;
 		}
 		// Client says CLOSE
 		if(firstPart.equals("CLOSE")) {
