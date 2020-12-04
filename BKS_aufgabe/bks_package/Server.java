@@ -6,7 +6,7 @@ import java.util.Scanner; // Import the Scanner class to read text files
 
 public class Server {
 	
-	//public String directoryPath = "/home/mafalda/eclipse-workspace/BKS_aufgabe/bks_package/directoryPath";
+	//public String directoryPath = "/home/mafalda/bks/BKS_aufgabe/bks_package/directoryPath";
 	public String directoryPath = "C:\\Users\\maxim\\OneDrive\\Dokumente\\GitHub\\bks-aufgabe1\\BKS_aufgabe\\bks_package\\directoryPath"; //Pfad bei Max
 	
 	public String getDirectoryPath() {
