@@ -1,20 +1,13 @@
 package bks_package;
 import java.io.File;  // Import the File class
 import java.io.FileNotFoundException;  // Import this class to handle errors
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
 import java.util.Scanner; // Import the Scanner class to read text files
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 public class Server {
 	
-	public String directoryPath = "/home/mafalda/eclipse-workspace/BKS_aufgabe/bks_package/directoryPath";
-	//public String directoryPath = "C:\\Users\\maxim\\OneDrive\\Dokumente\\GitHub\\bks-aufgabe1\\BKS_aufgabe\\bks_package\\directoryPath"; //Pfad bei Max
+	//public String directoryPath = "/home/mafalda/eclipse-workspace/BKS_aufgabe/bks_package/directoryPath";
+	public String directoryPath = "C:\\Users\\maxim\\OneDrive\\Dokumente\\GitHub\\bks-aufgabe1\\BKS_aufgabe\\bks_package\\directoryPath"; //Pfad bei Max
 	
 	public String getDirectoryPath() {
 		return directoryPath;
