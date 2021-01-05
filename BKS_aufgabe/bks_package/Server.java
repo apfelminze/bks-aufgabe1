@@ -19,17 +19,15 @@ public class Server {
 
 	private String directoryPath;
 	
-	//public String directoryPath = "/home/mafalda/bks/BKS_aufgabe/bks_package/directoryPath";
-	// public String directoryPath = "C:\\Users\\maxim\\OneDrive\\Dokumente\\GitHub\\bks-aufgabe1\\BKS_aufgabe\\bks_package\\directoryPath"; //Pfad bei Max
-	
 	public String getDirectoryPath() {
 		return directoryPath;
+	}
 
 	private int port = 50113;
 
 	public Server() throws IOException {
 
-		this.directoryPath = System.getProperty("user.dir") + "\\Files\\";
+		this.directoryPath = System.getProperty("user.dir") + "\\Files";
 
 		this.startServerSocket();
 
@@ -57,9 +55,11 @@ public class Server {
 				} else if (split[0].equalsIgnoreCase("GET") && split.length == 2) {
 					System.out.println("Client fragt nach Inhalt von Datei " + split[1].toString() + ".");
 					serverOutput.println(this.getFile(split[1]));
+				} else {
+					serverOutput.println("Unbekannter Befehl.");
 				}
 
-				serverOutput.println("End");
+				serverOutput.println("\u001a"); // End-of-file escape symbol
 			}
 		}
 	}
@@ -77,23 +77,30 @@ public class Server {
 	}
 
 	public void putOnIO() throws IOException {
-		this.clientInput = new Scanner(clientSocket.getInputStream()); // Used to get sended strings from client
+		this.clientInput = new Scanner(clientSocket.getInputStream()); // Used to get sent strings from client
 		this.serverOutput = new PrintWriter(clientSocket.getOutputStream(), true); // Used to send strings to the client
 	}
 
 	// Client says GET
 	public String getFile(String filename) {
 		try {
+			
 			String completeFileName = directoryPath + "/" + filename;
-			System.out.println(completeFileName);
-			String data = "";
 			File myObj = new File(completeFileName);
+			
+			System.out.println(completeFileName);
+			
+			String data = "";
+			
 			Scanner myReader = new Scanner(myObj);
+			
 			while (myReader.hasNextLine()) {
 				String line = myReader.nextLine();
 				data = data + "\n" + line;
 			}
+			
 			myReader.close();
+			
 			return data;
 		} catch (FileNotFoundException e) {
 			return "Datei nicht gefunden.";
@@ -104,6 +111,8 @@ public class Server {
 	public String listFiles() {
 
 		File folder = new File(this.directoryPath);
+		
+		folder.mkdir(); // Create directory if not exists
 
 		StringBuilder fileNames = new StringBuilder();
 
@@ -112,7 +121,7 @@ public class Server {
 				fileNames.append(f.getName() + "|"); // "|" functions as delimiter between the filenames
 
 		if (fileNames.length() < 1)
-			return "Fehlendes Verzeichnis.";
+			return "Keine Dateien im Verzeichnis.";
 		else
 			fileNames.setLength(fileNames.length() - 1); // Delete unnecessary last "|"
 

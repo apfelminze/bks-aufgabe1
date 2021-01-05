@@ -37,8 +37,7 @@ public class Client {
 
 			String serverOutput = inputServer.nextLine();
 
-			while (!serverOutput.equals("End")) { // Writes what the server sended to console; Problem: If in file is
-													// written "End" the client stopps transmitting the rest of the data
+			while (!serverOutput.equals("\u001a")) { 
 				System.out.println(serverOutput);
 				serverOutput = inputServer.nextLine();
 			}
@@ -46,17 +45,29 @@ public class Client {
 	}
 
 	public static void main(String[] args) {
+		Scanner inputUser = new Scanner(System.in);
 		while (true) {
 			try {
 				Client client = new Client(serverAddress, port);
 				System.out.println("Konnte keine Verbindung herstellen.");
 				System.out.print("Erneut verbinden? (y/N)");
-				Scanner inputUser = new Scanner(System.in);
 				String answer = inputUser.nextLine();
-				inputUser.close();
-				if (!(answer.equals("y"))) {
+				if ((answer.equalsIgnoreCase("n"))) {
 					System.out.println("Client wird beendet.");
 					break;
+				} else if (!(answer.equalsIgnoreCase("y"))) {
+					boolean correctAnswer = false;
+					while (!correctAnswer) {
+						System.out.println("Unbekannte Eingabe.");
+						System.out.print("Erneut verbinden? (y/N)");
+						answer = inputUser.nextLine();
+						if ((answer.equalsIgnoreCase("n"))) {
+							System.out.println("Client wird beendet.");
+							break;
+						} else if (answer.equalsIgnoreCase("y")) {
+							correctAnswer = true;
+						}
+					}
 				}
 			} catch (UnknownHostException e) {
 				System.out.println("Der Host ist unbekannt.");
@@ -88,22 +99,23 @@ public class Client {
 		System.out.println("Trenne Verbindung");
 		outputClient.println("QUIT");
 		this.socket.close();
-		this.inputUser.close();
 	}
 
 	public static boolean changeCredentials() {
-		String answer = "N";
 		System.out.print("Erneut mit anderen Parametern probieren? (y/N) ");
-		answer = inputUser.nextLine();
+		String answer = inputUser.nextLine();
 		if (answer.equals("y")) {
 			System.out.print("Neue Hostaddresse (alte Addresse: " + serverAddress + "): ");
 			serverAddress = inputUser.nextLine();
 			System.out.print("Neuer Port (alter Port: " + port + "): ");
 			port = Integer.parseInt(inputUser.nextLine());
 			return true;
-		} else {
+		} else if (answer.equalsIgnoreCase("n")) {
 			System.out.println("Client wird beendet.");
 			return false;
+		} else {
+			System.out.println("Unbekannte Eingabe.");
+			return changeCredentials();
 		}
 	}
 
