@@ -11,120 +11,26 @@ import java.util.Scanner;
 
 public class Server {
 
-	private ServerSocket server;
-	private Socket clientSocket;
-
-	private Scanner clientInput;
-	private PrintWriter serverOutput;
-
-	private String directoryPath;
+	private static Socket clientSocket;
+	private static ServerSocket server;
 	
-	public String getDirectoryPath() {
-		return directoryPath;
-	}
-
-	private int port = 50113;
-
-	public Server() throws IOException {
-
-		this.directoryPath = System.getProperty("user.dir") + "\\Files";
-
-		this.startServerSocket();
-
-		System.out.println("Server gestartet.");
-		System.out.println("Warte auf Verbindungen...");
-
-		while (true) {
-			this.clientSocket = server.accept(); // Accepts the client connection
-
-			this.putOnIO();
-
-			System.out.println("Client verbunden.");
-
-			String input;
-
-			while ((input = clientInput.nextLine()) != null) {
-				String[] split = input.split("\\s");
-				if (split[0].equalsIgnoreCase("QUIT")) {
-					System.out.println("Client trennt die Verbindung.");
-					clientSocket.close();
-					break;
-				} else if (split[0].equalsIgnoreCase("LIST")) {
-					System.out.println("Client fragt nach Dateienliste.");
-					serverOutput.println(this.listFiles());
-				} else if (split[0].equalsIgnoreCase("GET") && split.length == 2) {
-					System.out.println("Client fragt nach Inhalt von Datei " + split[1].toString() + ".");
-					serverOutput.println(this.getFile(split[1]));
-				} else {
-					serverOutput.println("Unbekannter Befehl.");
-				}
-
-				serverOutput.println("\u001a"); // End-of-file escape symbol
-			}
-		}
-	}
+	private static int port = 50113;
 
 	public static void main(String[] args) {
+		
+		System.out.println("Server gestartet.");
+		System.out.println("Warte auf Verbindungen...");
+		
+		int amountClients = 1;
+
 		try {
-			Server server = new Server();
+			server = new ServerSocket(port);
+			while (true) {
+				clientSocket = server.accept();
+				new Thread( new ParallelPart(clientSocket, amountClients)).start();
+			}
 		} catch (IOException e) {
 			System.out.println("Es gab ein Problem beim Dateien lesen.");
 		}
-	}
-
-	public void startServerSocket() throws IOException {
-		server = new ServerSocket(port); // Starts the server
-	}
-
-	public void putOnIO() throws IOException {
-		this.clientInput = new Scanner(clientSocket.getInputStream()); // Used to get sent strings from client
-		this.serverOutput = new PrintWriter(clientSocket.getOutputStream(), true); // Used to send strings to the client
-	}
-
-	// Client says GET
-	public String getFile(String filename) {
-		try {
-			
-			String completeFileName = directoryPath + "/" + filename;
-			File myObj = new File(completeFileName);
-			
-			System.out.println(completeFileName);
-			
-			String data = "";
-			
-			Scanner myReader = new Scanner(myObj);
-			
-			while (myReader.hasNextLine()) {
-				String line = myReader.nextLine();
-				data = data + "\n" + line;
-			}
-			
-			myReader.close();
-			
-			return data;
-		} catch (FileNotFoundException e) {
-			return "Datei nicht gefunden.";
-		}
-	}
-
-	// Client says LIST
-	public String listFiles() {
-
-		File folder = new File(this.directoryPath);
-		
-		folder.mkdir(); // Create directory if not exists
-
-		StringBuilder fileNames = new StringBuilder();
-
-		for (final File f : folder.listFiles())
-			if (f.isFile())
-				fileNames.append(f.getName() + "|"); // "|" functions as delimiter between the filenames
-
-		if (fileNames.length() < 1)
-			return "Keine Dateien im Verzeichnis.";
-		else
-			fileNames.setLength(fileNames.length() - 1); // Delete unnecessary last "|"
-
-		return fileNames.toString();
 	}
 }
