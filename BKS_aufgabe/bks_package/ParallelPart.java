@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class ParallelPart implements Runnable {
@@ -57,6 +58,8 @@ public class ParallelPart implements Runnable {
 				}
 			} catch (IOException e) {
 				System.out.println("Es gab ein Problem mit den Dateien.");
+			} catch (NoSuchElementException e) {
+				System.out.println("Verbindung zum Client verloren.");
 			}
 	}
 	

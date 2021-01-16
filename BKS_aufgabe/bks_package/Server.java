@@ -23,7 +23,7 @@ public class Server {
 		System.out.println("Server gestartet.");
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Bitte geben Sie den Pfad des Verzeichnisses an, auf das der Server zugreifen soll: \n");
-		String path = scanner.nextLine();
+		String path = scanner.nextLine(); // If path not exists, it will be created
 		scanner.close();
 		System.out.println("Warte auf Verbindungen...");
 		
