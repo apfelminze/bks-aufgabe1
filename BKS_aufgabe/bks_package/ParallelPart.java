@@ -22,54 +22,72 @@ public class ParallelPart implements Runnable {
 	private int clientNumber;
 	
 	public ParallelPart(Socket clientSocket, int clientNumber, String path) {
+		
 		this.clientSocket = clientSocket;
 		this.clientNumber = clientNumber;
 		this.directoryPath = path;
+		
 	}
 	
 	public void run() {
-		
-		// this.directoryPath = System.getProperty("user.dir") + "\\Files";
 
 		try {
-				this.putOnIO();
-				System.out.println("Client " + this.clientNumber + " verbunden.");
+			
+			this.putOnIO();
+			
+			System.out.println("Client " + this.clientNumber + " verbunden.");
 	
-				String input;
+			String input;
 	
-				while ((input = clientInput.nextLine()) != null) {
-					String[] split = input.split("\\s");
-					if (split[0].equalsIgnoreCase("QUIT")) {
-						System.out.println("Client " + this.clientNumber + " trennt die Verbindung.");
-						clientSocket.close();
-						break;
-					} else if (split[0].equalsIgnoreCase("LIST")) {
-						System.out.println("Client " + this.clientNumber + " fragt nach Dateienliste.");
-						serverOutput.println(this.listFiles());
-					} else if (split[0].equalsIgnoreCase("GET") && split.length == 2) {
-						System.out.println("Client " + this.clientNumber + " fragt nach Inhalt von Datei " + split[1].toString() + ".");
-						serverOutput.println(this.getFile(split[1]));
-					} else {
-						serverOutput.println("Unbekannter Befehl.");
-					}
-	
-					serverOutput.println("\u001a"); // End-of-file escape symbol
+			while ((input = clientInput.nextLine()) != null) {
+					
+				String[] split = input.split("\\s");
+					
+				if (split[0].equalsIgnoreCase("QUIT")) {
+						
+					System.out.println("Client " + this.clientNumber + " trennt die Verbindung.");
+					clientSocket.close();
+					break;
+						
+				} else if (split[0].equalsIgnoreCase("LIST")) {
+						
+					System.out.println("Client " + this.clientNumber + " fragt nach Dateienliste.");
+					serverOutput.println(this.listFiles());
+						
+				} else if (split[0].equalsIgnoreCase("GET") && split.length == 2) {
+						
+					System.out.println("Client " + this.clientNumber + " fragt nach Inhalt von Datei " + split[1].toString() + ".");
+					serverOutput.println(this.getFile(split[1]));
+						
+				} else {
+						
+					serverOutput.println("Unbekannter Befehl.");
+						
 				}
-			} catch (IOException e) {
-				System.out.println("Es gab ein Problem mit den Dateien.");
-			} catch (NoSuchElementException e) {
-				System.out.println("Verbindung zum Client verloren.");
+	
+				serverOutput.println("\u001a"); // End-of-file escape symbol
+				
 			}
+				
+		} catch (IOException e) {
+			System.out.println("Es gab ein Problem mit den Dateien.");
+		} catch (NoSuchElementException e) {
+			System.out.println("Verbindung zum Client " + this.clientNumber + " verloren.");
+		}
+		
 	}
 	
 
 	public void putOnIO() throws IOException {
+		
 		this.clientInput = new Scanner(clientSocket.getInputStream()); // Used to get sent strings from client
 		this.serverOutput = new PrintWriter(clientSocket.getOutputStream(), true); // Used to send strings to the client
+		
 	}
 	
 	// Client says GET
 	public String getFile(String filename) {
+		
 		try {
 			
 			String completeFileName = directoryPath + "/" + filename;
@@ -87,6 +105,7 @@ public class ParallelPart implements Runnable {
 			myReader.close();
 			
 			return data;
+			
 		} catch (FileNotFoundException e) {
 			return "Datei nicht gefunden.";
 		}
