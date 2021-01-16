@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Client {
@@ -19,7 +20,7 @@ public class Client {
 
 	private Socket socket;
 
-	public Client(String address, int port) throws UnknownHostException, IOException {
+	public Client(String address, int port) throws UnknownHostException, IOException, NoSuchElementException{
 		this.connectToServer(address, port);
 
 		this.putOnIO();
@@ -79,6 +80,11 @@ public class Client {
 
 			} catch (IOException e) {
 				System.out.println("Konnte keine Verbindung herstellen.");
+				if (!changeCredentials()) {
+					break;
+				}
+			} catch (NoSuchElementException e) {
+				System.out.println("Der Server hat die Verbindung unterbrochen.");
 				if (!changeCredentials()) {
 					break;
 				}

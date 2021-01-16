@@ -2,13 +2,9 @@ package BKS_aufgabe.bks_package;
 import BKS_aufgabe.bks_package.ParallelPart;
 import BKS_aufgabe.bks_package.Client;
 
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Server {
@@ -22,8 +18,14 @@ public class Server {
 		
 		System.out.println("Server gestartet.");
 		Scanner scanner = new Scanner(System.in);
-		System.out.println("Bitte geben Sie den Pfad des Verzeichnisses an, auf das der Server zugreifen soll: \n");
+		System.out.println("Bitte geben Sie den Ordner des Verzeichnisses an, auf das der Server zugreifen soll: \n");
 		String path = scanner.nextLine(); // If path not exists, it will be created
+		
+		while(!isValidPath(path)) { // Check for valid path
+			System.out.println("Ungültiger Ordner, bitte neuen angeben: \n");
+			path = scanner.nextLine();
+		}
+		
 		scanner.close();
 		System.out.println("Warte auf Verbindungen...");
 		
@@ -38,5 +40,14 @@ public class Server {
 		} catch (IOException e) {
 			System.out.println("Es gab ein Problem beim Dateien lesen.");
 		}
+	}
+	
+	public static boolean isValidPath(String path) {
+		
+		if (path.matches(".*[/\n\r\t\0\f`?*\\<>|\":].*")) {
+			return false;
+		} 
+		
+		return true;
 	}
 }
