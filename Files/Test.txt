@@ -1,3 +1,5 @@
 Das ist ein Test.
+\\u001a
 \u001a
+u001a
 :)

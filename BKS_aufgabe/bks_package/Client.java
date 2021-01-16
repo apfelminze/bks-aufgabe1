@@ -1,4 +1,6 @@
-package bks_package;
+package BKS_aufgabe.bks_package;
+import BKS_aufgabe.bks_package.ParallelPart;
+import BKS_aufgabe.bks_package.Server;
 
 import java.io.IOException;
 import java.io.PrintWriter;

@@ -1,4 +1,6 @@
-package bks_package;
+package BKS_aufgabe.bks_package;
+import BKS_aufgabe.bks_package.Server;
+import BKS_aufgabe.bks_package.Client;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,14 +21,15 @@ public class ParallelPart implements Runnable {
 	
 	private int clientNumber;
 	
-	public ParallelPart(Socket clientSocket, int clientNumber) {
+	public ParallelPart(Socket clientSocket, int clientNumber, String path) {
 		this.clientSocket = clientSocket;
 		this.clientNumber = clientNumber;
+		this.directoryPath = path;
 	}
 	
 	public void run() {
 		
-		this.directoryPath = System.getProperty("user.dir") + "\\Files";
+		// this.directoryPath = System.getProperty("user.dir") + "\\Files";
 
 		try {
 				this.putOnIO();
