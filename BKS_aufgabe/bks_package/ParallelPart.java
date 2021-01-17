@@ -1,3 +1,7 @@
+// Wir hatten im Team zwei unterschiedl. Betriebssysteme; in dem einen funktioniert (nur) die Version:
+// package bks_package;
+// import bks_package.ParallelPart;
+// import bks_package.Server;
 package BKS_aufgabe.bks_package;
 import BKS_aufgabe.bks_package.Server;
 import BKS_aufgabe.bks_package.Client;
