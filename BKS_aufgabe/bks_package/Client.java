@@ -59,6 +59,7 @@ public class Client {
 	}
 
 	/**
+	 * Starts the client, receives user input and catches exceptions
 	 * @param args
 	 */
 	public static void main(String[] args) {

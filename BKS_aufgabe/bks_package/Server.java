@@ -16,7 +16,7 @@ public class Server {
 	private static int port = 50113;
 
 	/**
-	 * @param args
+	 * Starts the server and receives client connections
 	 */
 	public static void main(String[] args) {
 		
