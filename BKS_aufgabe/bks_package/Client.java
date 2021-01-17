@@ -20,6 +20,13 @@ public class Client {
 
 	private Socket socket;
 
+	/**
+	 * @param address IP address of the server
+	 * @param port Port of the server
+	 * @throws UnknownHostException If server is not available
+	 * @throws IOException If there is a problem with opening files
+	 * @throws NoSuchElementException If server doesn't answers anymore
+	 */
 	public Client(String address, int port) throws UnknownHostException, IOException, NoSuchElementException {
 		
 		this.connectToServer(address, port);
@@ -51,6 +58,9 @@ public class Client {
 		}
 	}
 
+	/**
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		
 		Scanner inputUser = new Scanner(System.in);
@@ -114,12 +124,23 @@ public class Client {
 		
 	}
 
-	public void connectToServer(String serverAddress, int Port) throws UnknownHostException, IOException {
+	/**
+	 * Creates the socket and connects client to the server
+	 * @param address IP address of the server
+	 * @param port Port of the server
+	 * @throws UnknownHostException If server is not available
+	 * @throws IOException If there are problems with the socket
+	 */
+	public void connectToServer(String serverAddress, int port) throws UnknownHostException, IOException {
 		
-		this.socket = new Socket(serverAddress, Port);
+		this.socket = new Socket(serverAddress, port);
 		
 	}
 
+	/**
+	 * Initialize the writers and scanners for the communication with the server and the user
+	 * @throws IOException If there are problems with the socket
+	 */
 	public void putOnIO() throws IOException {
 		
 		this.outputClient = new PrintWriter(this.socket.getOutputStream(), true);
@@ -128,6 +149,10 @@ public class Client {
 		
 	}
 
+	/**
+	 * Quits the connection to the server
+	 * @throws IOException If there are problems with the socket
+	 */
 	public void quitConnection() throws IOException {
 		
 		System.out.println("Trenne Verbindung");
@@ -136,6 +161,10 @@ public class Client {
 		
 	}
 
+	/**
+	 * Asks if the user wants to reconnect with new server address and port
+	 * @return If user wants to quit the return value is false, if he wants to reconnect the return value is true
+	 */
 	public static boolean changeCredentials() {
 		
 		System.out.print("Erneut mit anderen Parametern probieren? (y/N) ");

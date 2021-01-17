@@ -15,6 +15,9 @@ public class Server {
 	
 	private static int port = 50113;
 
+	/**
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		
 		System.out.println("Server gestartet.");

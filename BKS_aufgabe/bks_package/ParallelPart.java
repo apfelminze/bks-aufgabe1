@@ -29,6 +29,10 @@ public class ParallelPart implements Runnable {
 		
 	}
 	
+	/**
+	 * Mandatory part of the runnable interface.
+	 * Takes client commands, execute it and returns the result.
+	 */
 	public void run() {
 
 		try {
@@ -78,6 +82,10 @@ public class ParallelPart implements Runnable {
 	}
 	
 
+	/**
+	 * Initialize the writers and scanners for the communication with the server and the user
+	 * @throws IOException If there is a problem with the socket
+	 */
 	public void putOnIO() throws IOException {
 		
 		this.clientInput = new Scanner(clientSocket.getInputStream()); // Used to get sent strings from client
@@ -85,7 +93,12 @@ public class ParallelPart implements Runnable {
 		
 	}
 	
-	// Client says GET
+	
+	/**
+	 * Gets content of file
+	 * @param filename Filename of the file to be outputed
+	 * @return Content of given file
+	 */
 	public String getFile(String filename) {
 		
 		try {
@@ -111,7 +124,11 @@ public class ParallelPart implements Runnable {
 		}
 	}
 
-	// Client says LIST
+	
+	/**
+	 * Lists all files in the directory path
+	 * @return All files separated by "|"
+	 */
 	public String listFiles() {
 
 		File folder = new File(this.directoryPath);
