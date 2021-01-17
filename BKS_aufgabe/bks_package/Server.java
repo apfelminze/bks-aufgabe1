@@ -1,14 +1,15 @@
+// Wir hatten im Team zwei unterschiedl. Betriebssysteme; in dem einen funktioniert (nur) die Version:
+// package bks_package;
+// import bks_package.ParallelPart;
+// import bks_package.Server;
 package BKS_aufgabe.bks_package;
 import BKS_aufgabe.bks_package.ParallelPart;
 import BKS_aufgabe.bks_package.Client;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Server {
@@ -18,12 +19,24 @@ public class Server {
 	
 	private static int port = 50113;
 
+	/**
+	 * Starts the server and receives client connections
+	 */
 	public static void main(String[] args) {
 		
 		System.out.println("Server gestartet.");
 		Scanner scanner = new Scanner(System.in);
-		System.out.println("Bitte geben Sie den Pfad des Verzeichnisses an, auf das der Server zugreifen soll: \n");
-		String path = scanner.nextLine();
+		
+		System.out.println("Bitte geben Sie den Pfad des Verzeichnisses an, auf das der Server zugreifen soll:");
+		String path = scanner.nextLine(); 
+		
+		while(!(new File(path).exists())) { // Check for valid path
+			
+			System.out.println("Ungültiger Pfad, bitte neuen angeben:");
+			path = scanner.nextLine();
+			
+		}
+		
 		scanner.close();
 		System.out.println("Warte auf Verbindungen...");
 		
@@ -34,9 +47,11 @@ public class Server {
 			while (true) {
 				clientSocket = server.accept();
 				new Thread(new ParallelPart(clientSocket, amountClients, path)).start();
+				amountClients++;
 			}
 		} catch (IOException e) {
 			System.out.println("Es gab ein Problem beim Dateien lesen.");
 		}
 	}
+	
 }
